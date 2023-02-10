@@ -9,12 +9,12 @@ struct Noeud{
 
 struct Liste{
     Noeud* premier;
-    // your code
+    int valeur;
 };
 
 struct DynaTableau{
     int* donnees;
-    // your code
+    int taille;
 };
 
 
