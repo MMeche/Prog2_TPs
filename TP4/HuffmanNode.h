@@ -1,12 +1,11 @@
 #ifndef HUFFMANNNODE_H
 #define HUFFMANNNODE_H
 
-#include <QString>
+// #include <QString>
 
-#include "binarytree.h"
-#include "array.h"
+#include <string>
 
-struct HuffmanNode : public Node
+struct HuffmanNode
 {
     HuffmanNode* left;
     HuffmanNode* right;
@@ -15,7 +14,7 @@ struct HuffmanNode : public Node
     unsigned char character;
     std::string code;
 
-    HuffmanNode(unsigned char c='\0', int frequences=0) : Node(frequences)
+    HuffmanNode(unsigned char c='\0', int frequences=0)
     {
         this->frequences = frequences;
         this->character = c;
@@ -23,7 +22,7 @@ struct HuffmanNode : public Node
         this->left = this->right = NULL;
     }
 
-    HuffmanNode(const HuffmanNode& node): Node(node)
+    HuffmanNode(const HuffmanNode& node)
     {
         this->frequences = node.frequences;
         this->character = node.character;
@@ -35,18 +34,11 @@ struct HuffmanNode : public Node
 
     void insertNode(HuffmanNode*);
     void processCodes(std::string baseCode);
-    void fillCharactersArray(HuffmanNode** nodes_for_chars);
-
-
-    virtual ~HuffmanNode() {}
-    virtual QString toString() const override
-        {return QString("%1:\n%2").arg(QString(character)).arg(frequences);}
-    Node* get_left_child() const override {return left;};
-    Node* get_right_child() const override {return right;};
+    void fillCharactersArray(std::string nodes_for_chars[]);
 };
 
 
-class HuffmanHeap : public TemplateArray<HuffmanNode>
+/*class HuffmanHeap : public TemplateArray<HuffmanNode>
 {
 public:
     virtual ~HuffmanHeap() {}
@@ -61,27 +53,7 @@ public:
         }
     }
 
-    QString toString() const
-    {
-        QStringList list;
-        for (const HuffmanNode& value : _data)
-        {
-            list.append(value.toString());
-        }
-        return QString("[%1]").arg(list.join(", "));
-    }
-
-
-    virtual size_t effectiveSize() const
-    {
-        return _data.size();
-    }
-
-    HuffmanNode& get(uint index) {
-        return _data[index];
-    }
-
     void insertHeapNode(int heapSize, unsigned char c, int frequences);
 };
-
+*/
 #endif // HUFFMANNNODE_H

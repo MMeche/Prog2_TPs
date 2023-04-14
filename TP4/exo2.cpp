@@ -1,13 +1,12 @@
 #include <time.h>
 #include <stdio.h>
+#include
+// #include <QApplication>
+// #include <QDebug>
 
-#include <QApplication>
-#include <QDebug>
-
-#include "tp3.h"
+// #include "tp3.h"
 #include "HuffmanNode.h"
 
-_TestMainWindow* w = nullptr;
 using std::size_t;
 using std::string;
 
@@ -126,44 +125,6 @@ string huffmanDecode(HuffmanNode* dict, string toDecode)
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    Array::wait_for_operations = false;
-    w = new _TestMainWindow();
-
-    string data = "Ouesh, bien ou bien ? Ceci est une chaine de caracteres sans grand interet";
-
-    Array& frequences = w->newArray(256);
-    HuffmanHeap heap(256);
-    HuffmanNode* dict;
-    int i;
-
-    for (i=0; i < (int)frequences.size(); ++i)
-        frequences.__set__(i, 0);
-
-    charFrequences(data, frequences);
-
-    for (i=0; i < (int)frequences.size(); ++i)
-        if (frequences[i]>0)
-            qDebug() << (char)i << ": " << frequences[i];
-
-    int heapSize=0;
-
-    huffmanHeap(frequences, heap, heapSize);
-    huffmanDict(heap, heapSize, dict);
-    dict->processCodes("");
-
-    HuffmanNode* characters[256];
-    memset(characters, 0, 256 * sizeof (HuffmanNode*));
-    dict->fillCharactersArray(characters);
-
-    string encoded = huffmanEncode(characters, data);
-    string decoded = huffmanDecode(dict, encoded);
-
-    w->addBinaryNode(dict);
-    w->updateScene();
-    qDebug("Encoded: %s\n", encoded.c_str());
-    qDebug("Decoded: %s\n", decoded.c_str());
-    w->show();
-
-    return a.exec();
+    HuffmanNode* root;
+    main_function(root);
 }

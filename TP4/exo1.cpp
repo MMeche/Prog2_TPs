@@ -1,52 +1,95 @@
-#include "tp4.h"
-#include "mainwindow.h"
+// #include "tp4.h"
+// #include "mainwindow.h"
 
-#include <QApplication>
+// #include <QApplication>
+#include <iostream>
 #include <time.h>
 #include <stdio.h>
+#include <vector>
+#include<math.h>
+using namespace std;
 
-MainWindow* w = nullptr;
-using std::size_t;
-using std::string;
+// MainWindow* w = nullptr;
 
-int Heap::leftChild(int nodeIndex)
+struct Heap
 {
-    return 0;
-}
+	vector<int> tab;
 
-int Heap::rightChild(int nodeIndex)
+	int leftChild(int nodeIndex)
+	{
+		return nodeIndex*2+1;
+	};
+	
+	int rightChild(int nodeIndex)
+	{
+		return nodeIndex*2+2;
+	};
+	
+	void insertHeapNode(int value)
+	{
+		this->tab.push_back(value);
+		int i = this->tab.size()-1 ;
+		while(i>0 && this->tab[i]>this->tab[(i-1)/2])
+		{
+			int  tmp = this->tab[(i-1)/2];
+			this->tab[(i-1)/2] = this->tab[i];
+			this->tab[i] = tmp;
+			i=(i-1)/2;
+		};
+	};
+	
+	void heapify(int nodeIndex)
+	{	
+		int largest = nodeIndex ;
+		if (this->tab[largest]<this->tab[rightChild(largest)])
+		{
+			largest = rightChild(largest);
+		};
+		if (this->tab[largest]<this->tab[leftChild(largest)])
+		{
+			largest = leftChild(largest);
+		};
+		if (largest!=nodeIndex)
+		{
+			int  tmp = this->tab[largest];
+			this->tab[largest] = this->tab[nodeIndex];
+			this->tab[nodeIndex] = tmp;
+			heapify(largest);
+		};
+	}
+
+	void buildHeap(vector<int> Numbers)
+	{
+		this->tab = Numbers;
+		for(int i=0;i<Numbers.size();i++)
+		{
+			heapify(i);
+		}
+	}
+
+	void sort()
+	{
+		for(int i = this->tab.size()-1 ; i>-1 ; i--)
+		{
+			int tmp = this->tab[0];
+			this->tab[0] = this->tab[i];
+			this->tab[i] = tmp;
+			heapify(i);
+		}
+	}
+};
+
+struct Node
 {
-    return 0;
-}
+	int nodeIndex;
+	int value;
+	Node* filsgauche;
+	Node* filsdroit;
+	Node* parent;
+};
 
-void Heap::insertHeapNode(int heapSize, int value)
-{
-	// use (*this)[i] or this->get(i) to get a value at index i
-	int i = heapSize;
-}
-
-void Heap::heapify(int heapSize, int nodeIndex)
-{
-	// use (*this)[i] or this->get(i) to get a value at index i
-	int i_max = nodeIndex;
-}
-
-void Heap::buildHeap(Array& numbers)
-{
-
-}
-
-void Heap::heapSort()
-{
-
-}
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
-    MainWindow::instruction_duration = 50;
-    w = new HeapWindow();
-	w->show();
-
-	return a.exec();
+	return 0;
 }

@@ -1,5 +1,6 @@
 {
     "files.associations": {
         "ostream": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "D:/docs/Important/Cours/S2/Prog/Prog2_TPs/TP1/Projet_IMAC1_s1_2022"
 }

@@ -1,11 +1,13 @@
-#include <tp5.h>
-#include <QApplication>
+//#include <tp5.h>
+//#include <QApplication>
 #include <time.h>
+#include <vector>
+#include <string>
 
-MainWindow* w = nullptr;
+//MainWindow* w = nullptr;
 
 
-std::vector<string> TP5::names(
+std::vector<std::string> names(
 {
     "Yolo", "Anastasiya", "Clement", "Sirine", "Julien", "Sacha", "Leo", "Margot",
     "JoLeClodo", "Anais", "Jolan", "Marie", "Cindy", "Flavien", "Tanguy", "Audrey",
@@ -46,10 +48,5 @@ bool HashTable::contains(std::string element)
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
-	MainWindow::instruction_duration = 10;
-	w = new HashWindow();
-	w->show();
-
-	return a.exec();
+	return 0;
 }
