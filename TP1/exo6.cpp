@@ -18,14 +18,14 @@ struct DynaTableau{
 };
 
 
-void initialise(Liste* liste)
+void initialise_l(Liste* liste)
 {
-    Noeud* nouveau = new Noeud;
-    nouveau=nullptr;
-    liste->premier=nouveau;
+    Noeud* init = new Noeud;
+    init = nullptr;
+    liste->premier = init;
 }
 
-bool est_vide(const Liste* liste)
+bool est_vide_l(const Liste* liste)
 {
     if(liste->premier==nullptr){
         return true;
@@ -33,132 +33,131 @@ bool est_vide(const Liste* liste)
     return false;
 }
 
-void ajoute(Liste* liste, int valeur)
+void ajoute_l(Liste* liste, int valeur)
 {
-    Noeud* current = liste->premier;
-    while(current->suivant!=nullptr){
-        current=current->suivant;
+    Noeud* new_noeud = new Noeud;
+    new_noeud->donnee = valeur;
+    new_noeud->suivant = nullptr;
+    if(est_vide_l(liste)){
+        liste->premier = new_noeud;
     }
-    Noeud* nouveau = new Noeud;
-    nouveau->donnee=valeur;
-    current->suivant=nouveau;
+    else{
+        Noeud* current = liste->premier;
+        while(current->suivant != nullptr){
+            current = current->suivant;
+        }
+        current->suivant = new_noeud;
+    }
 }
 
-void affiche(const Liste* liste)
+void affiche_l(const Liste* liste)
 {
     Noeud* current = liste->premier;
-    std::cout<<"{";
-    while(current!=nullptr)
-    {
-        std::cout<<current->donnee<<", ";
+    std::cout<<"{ ";
+    while(current!=nullptr){
+        std::cout<<", "<<current->donnee;
+        current = current->suivant;
     }
-    std::cout<<"}"<<std::endl;
+    std::cout<<" }"<<std::endl;
 }
 
-int recupere(const Liste* liste, int n)
+int recupere_l(const Liste* liste, int n)
 {
     Noeud* current = liste->premier;
-    for(int i;i<n;i++)
-    {
+    for(int i=0;i<n;i++){
         current = current->suivant;
     }
     return current->donnee;
 }
 
-int cherche(const Liste* liste, int valeur)
+int cherche_l(const Liste* liste, int valeur)
 {
     Noeud* current = liste->premier;
-    int index = 0;
-    while(current->suivant!=nullptr)
-    {
-        if(current->donnee==valeur)
-        {
-            return index;
+    int cmp = 1;
+    while(current!=nullptr){
+        if(current->donnee == valeur){
+            return cmp;
         }
-        index++;
-    }
-    return -1;
-}
-
-void stocke(Liste* liste, int n, int valeur)
-{
-    Noeud* current = liste->premier;
-    for(int i;i<n;i++)
-    {
+        cmp++;
         current = current->suivant;
     }
-    current->donnee=valeur;
-}
-
-void ajoute(DynaTableau* tableau, int valeur)
-{
-    if(tableau->taille+1>tableau->max_taille)
-    {
-        int new_donnees[tableau->max_taille+1];
-        for(int index=0;index<tableau->max_taille;index++)
-        {
-            new_donnees[index]=tableau->donnees[index];
-        }
-        tableau->donnees = new_donnees;
-    }
-    
-    tableau->donnees[tableau->taille] = valeur;
-    tableau->taille ++;
-
-}
-
-
-void initialise(DynaTableau* tableau, int capacite)
-{
-    int jeu_2_donnees[capacite];
-    int taille = 0;
-    tableau->donnees = jeu_2_donnees;
-    tableau->max_taille = capacite;
-    tableau->taille=taille;
-}
-
-bool est_vide(const DynaTableau* tableau)
-{
-    if(tableau->taille==0)
-    {
-        return true;
-    }
-    return false;
-}
-
-void affiche(const DynaTableau* tableau)
-{
-    std::cout<<"[";
-    for(int index=0; index<tableau->taille;index++)
-    {
-        std::cout<<tableau->donnees[index]<<", ";
-    }
-    std::cout<<"]";
-}
-
-int recupere(const DynaTableau* tableau, int n)
-{
-    return tableau->donnees[n];
-}
-
-int cherche(const DynaTableau* tableau, int valeur)
-{
-    for(int index=0;index<tableau->taille;index++)
-    {
-        if(tableau->donnees[index]==valeur){
-            return index;
-        }
-    }
     return -1;
 }
 
-void stocke(DynaTableau* tableau, int n, int valeur)
+void stocke_l(Liste* liste, int n, int valeur)
 {
-    tableau->donnees[n]=valeur;
+    Noeud* current = liste->premier;
+    for(int i = 0; i<n;i++){
+        current = current->suivant;
+    }
+    current->donnee = valeur;
+}
+
+void ajoute_t(DynaTableau* tableau, int valeur)
+{
+    int taille = tableau->taille;
+    int max_taille = tableau->taille;
+    if(taille+1 > max_taille)
+    {
+        int new_donnee[max_taille+1];
+        for(int i =0; i<max_taille;i++)
+        {
+            new_donnee[i] = tableau->donnees[i];
+        }
+        new_donnee[max_taille] = valeur;
+        tableau->max_taille ++;
+        tableau->taille++;
+        tableau->donnees=new_donnee;
+    }
+    else{
+        tableau->donnees[taille] = valeur;
+        tableau->taille++;
+    }
+}
+
+
+void initialise_t(DynaTableau* tableau, int capacite)
+{
+    int donnees[capacite];
+    tableau->donnees = donnees;
+    tableau->max_taille = capacite;
+    tableau->taille = 0;
+}
+
+bool est_vide_t(DynaTableau* tableau)
+{
+    if(tableau->taille != 0)
+    {
+        return false;
+    }
+    return true;
+}
+
+void affiche_t(const DynaTableau* tableau)
+{
+    std::cout<<"[ ";
+    for(int i = 0; i <tableau->taille;i++){
+    std::cout<<", "<<tableau->donnees[i];
+    }
+    std::cout<<" ]";
+}
+
+int recupere_t(const DynaTableau* tableau, int n)
+{
+    
+}
+
+int cherche_t(const DynaTableau* tableau, int valeur)
+{
+
+}
+
+void stocke_t(DynaTableau* tableau, int n, int valeur)
+{
 }
 
 //void pousse_file(DynaTableau* liste, int valeur)
-void pousse_file(Liste* liste, int valeur)
+void pousse_file_l(Liste* liste, int valeur)
 {
     Noeud* nouveau_noeud = new Noeud;
     nouveau_noeud->donnee = valeur;
@@ -167,95 +166,140 @@ void pousse_file(Liste* liste, int valeur)
 }
 
 //int retire_file(Liste* liste)
-int retire_file(Liste* liste)
+int retire_file_l(Liste* liste)
 {
     Noeud* current = liste->premier;
-    while(current->suivant!=nullptr)
+    if(liste->premier->suivant == nullptr){
+        int valeur = liste->premier->donnee;
+        liste->premier = nullptr;
+        return valeur;
+    }
+    while(current->suivant->suivant!=nullptr)
     {
+    
         current = current->suivant;
     }
-    return current->donnee;
+    int valeur = current->suivant->donnee;
+    current->suivant  = nullptr;
+    return valeur;
 }
 
 //void pousse_pile(DynaTableau* liste, int valeur)
-void pousse_pile(Liste* liste, int valeur)
+void pousse_pile_l(Liste* liste, int valeur)
 {
-
+    Noeud* current = liste->premier;
+    Noeud* new_noeud = new Noeud;
+    new_noeud->donnee = valeur;
+    new_noeud->suivant = nullptr;
+    if(est_vide_l(liste)){
+        liste->premier = new_noeud;
+    }
+    else{
+        while(current->suivant != nullptr){
+            current = current->suivant;
+        }
+    
+    current->suivant = new_noeud;
+    }
 }
 
 //int retire_pile(DynaTableau* liste)
-int retire_pile(Liste* liste)
-{
-    return 0;
+int retire_pile_l(Liste* liste)
+{   
+    Noeud* current = liste->premier;
+    if(liste->premier->suivant == nullptr){
+        int valeur = liste->premier->donnee;
+        liste->premier = nullptr;
+        return valeur;
+    }
+    while(current->suivant->suivant!=nullptr)
+    {
+        current = current->suivant;
+    }
+    int valeur = current->suivant->donnee;
+    current->suivant = nullptr;
+    return valeur;
 }
 
 
 int main()
 {
     Liste liste;
-    initialise(&liste);
+    initialise_l(&liste);
     DynaTableau tableau;
-    initialise(&tableau, 5);
+    initialise_t(&tableau, 5);
+    std::cout<<"Valeurs par défauts :"<<std::endl;
+    affiche_l(&liste);
+    affiche_t(&tableau);
+    std::cout<<std::endl;
 
-    if (!est_vide(&liste))
+    if (!est_vide_l(&liste))
     {
         std::cout << "Oups y a une anguille dans ma liste" << std::endl;
     }
 
-    if (!est_vide(&tableau))
+    if (!est_vide_t(&tableau))
     {
         std::cout << "Oups y a une anguille dans mon tableau" << std::endl;
     }
-
+    
     for (int i=1; i<=7; i++) {
-        ajoute(&liste, i*7);
-        ajoute(&tableau, i*5);
+        ajoute_l(&liste, i*7);
+        ajoute_t(&tableau, i*5);
     }
 
-    if (est_vide(&liste))
+    if (est_vide_l(&liste))
     {
         std::cout << "Oups y a une anguille dans ma liste" << std::endl;
     }
 
-    if (est_vide(&tableau))
+    if (est_vide_t(&tableau))
     {
         std::cout << "Oups y a une anguille dans mon tableau" << std::endl;
     }
 
     std::cout << "Elements initiaux:" << std::endl;
-    affiche(&liste);
-    affiche(&tableau);
+    affiche_l(&liste);
+    affiche_t(&tableau);
     std::cout << std::endl;
 
-    std::cout << "5e valeur de la liste " << recupere(&liste, 4) << std::endl;
-    std::cout << "5e valeur du tableau " << recupere(&tableau, 4) << std::endl;
+    std::cout << "5e valeur de la liste " << recupere_l(&liste, 4) << std::endl;
+    // std::cout << "5e valeur du tableau " << recupere_t(&tableau, 4) << std::endl;
 
-    std::cout << "21 se trouve dans la liste à " << cherche(&liste, 21) << std::endl;
-    std::cout << "15 se trouve dans la liste à " << cherche(&tableau, 15) << std::endl;
+    std::cout << "21 se trouve dans la liste à " << cherche_l(&liste, 21) << std::endl;
+    // std::cout << "15 se trouve dans la liste à " << cherche_t(&tableau, 15) << std::endl;
 
-    stocke(&liste, 4, 7);
-    stocke(&tableau, 4, 7);
+    stocke_l(&liste, 4, 7);
+    // stocke_t(&tableau, 4, 7);
 
     std::cout << "Elements après stockage de 7:" << std::endl;
-    affiche(&liste);
-    affiche(&tableau);
+    
+    affiche_l(&liste);
+    // affiche_t(&tableau);
     std::cout << std::endl;
 
     Liste pile; // DynaTableau pile;
     Liste file; // DynaTableau file;
 
-    initialise(&pile);
-    initialise(&file);
+    initialise_l(&pile);
+    initialise_l(&file);
 
     for (int i=1; i<=7; i++) {
-        pousse_file(&file, i);
-        pousse_pile(&pile, i);
+        pousse_file_l(&file, i);
+        pousse_pile_l(&pile, i);
     }
 
+    std::cout<<"La file "<<std::endl;
+    affiche_l(&file);
+    std::cout<<"La pile "<<std::endl;
+    affiche_l(&pile);
+
+    std::cout<<"Vidons la file : "<<std::endl;
     int compteur = 10;
-    while(!est_vide(&file) && compteur > 0)
+    while(!est_vide_l(&file) && compteur > 0)
     {
-        std::cout << retire_file(&file) << std::endl;
+        std::cout << retire_file_l(&file) << std::endl;
+        affiche_l(&file);
         compteur--;
     }
 
@@ -264,10 +308,12 @@ int main()
         std::cout << "Ah y a un soucis là..." << std::endl;
     }
 
+    std::cout<<"Vidons la pile : "<<std::endl;
     compteur = 10;
-    while(!est_vide(&pile) && compteur > 0)
+    while(!est_vide_l(&pile) && compteur > 0)
     {
-        std::cout << retire_pile(&pile) << std::endl;
+        std::cout << retire_pile_l(&pile) << std::endl;
+        affiche_l(&pile);
         compteur--;
     }
 
