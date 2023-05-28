@@ -53,6 +53,6 @@ int main(int argc, char *argv[])
         std::cout << '\n';
     }
 
-	std::cout<<binarySearch(sorted,8)<<'\n';
+	std::cout<<binarySearch(sorted,25)<<'\n';
 	return 0;
 }

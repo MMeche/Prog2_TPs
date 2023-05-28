@@ -26,7 +26,7 @@ using namespace std;
 };
 
 
-struct SearchTreeNode : public Node
+struct SearchTreeNode
 {    
     SearchTreeNode* left;
     SearchTreeNode* right;
@@ -40,8 +40,19 @@ struct SearchTreeNode : public Node
 
 	void insertNumber(int value) {
         // create a new node and insert it in right or left child
-        Node* new_node = new Node;
+        SearchTreeNode* new_node = new SearchTreeNode;
         new_node->value = value;
+        if(this->left==nullptr)
+        {
+            this->left=new_node;
+            return;
+        }
+        if(this->right==nullptr)
+        {
+            this->right=new_node;
+            return;
+        }
+
         if(value < this->value)    
             this->left->insertNumber(value);
         else
@@ -98,11 +109,11 @@ struct SearchTreeNode : public Node
         return false;
 	}
 
-	void allLeaves(Node* leaves[],     unsigned int& leavesCount) {
+	void allLeaves(SearchTreeNode* leaves[],     unsigned int& leavesCount) {
         // fill leaves array with all leaves of this tree
         if(this->isLeaf())
         {
-            Node* copy_leaves[leavesCount+1];
+            SearchTreeNode* copy_leaves[leavesCount+1];
             for(int index = 0 ; index < leavesCount ; index++)
             {
                 copy_leaves[index] = leaves[index];
@@ -111,34 +122,72 @@ struct SearchTreeNode : public Node
             leaves = copy_leaves;
             leavesCount ++;
         }
-        this->right->allLeaves(leaves,leavesCount);
-        this->left->allLeaves(leaves,leavesCount);
-	}
-
-	void inorderTravel(Node* nodes[],      unsigned int& nodesCount) {
-        // fill nodes array with all nodes with inorder travel : (left,parent,right)
-        int nb_relatives ;
-        if(this->isLeaf())
+        if(this->right!=nullptr)
         {
-            return;
-        }//il faut jouer avec les indices 2*i+1 2*i-1...
-        Node* copy_leaves[nodesCount+nb_relatives];
-            for(int index = 0 ; index < nodesCount ; index++)
+            this->right->allLeaves(leaves,leavesCount);
+        }
+        if(this->left!=nullptr)
+        {
+            this->left->allLeaves(leaves,leavesCount);
+        }
+    }
+
+
+
+	void inorderTravel(std::vector<SearchTreeNode*> nodes, std::vector<SearchTreeNode*>::iterator it) {
+        // fill nodes array with all nodes with inorder travel : (left,parent,right)
+
+        if(it == nodes.begin())
+        {
+            nodes.push_back(this);
+            it=next(it);
+        }
+        
+        if(this->right!=nullptr)
+        {
+            if(it>=nodes.cend())
             {
-                copy_leaves[index] = nodes[index];
+                nodes.push_back(this->right);
             }
-            copy_leaves[nodesCount] = this;
-            nodes = copy_leaves;
-            nodesCount ++;
+            else
+            {
+                nodes.insert(it,this->right);
+            }
+            this->right->inorderTravel(nodes,it+1);
+        }
+        if(this->right!=nullptr)
+        {
+            nodes.insert(it-1,this->left);
+            this->left->inorderTravel(nodes,it);
+        }
+
 
 	}
 
-	void preorderTravel(Node* nodes[],     unsigned int& nodesCount) {
+	void preorderTravel(std::vector<SearchTreeNode*> nodes) {
         // fill nodes array with all nodes with preorder travel
+        nodes.push_back(this);
+        if(this->left!=nullptr)
+        {
+            this->left->preorderTravel(nodes);
+        }
+        if(this->right!=nullptr)
+        {
+            this->right->preorderTravel(nodes);
+        }
 	}
 
-	void postorderTravel(Node* nodes[],    unsigned int& nodesCount) {
+	void postorderTravel(std::vector<SearchTreeNode*> nodes) {
         // fill nodes array with all nodes with postorder travel
+        if(this->left!=nullptr)
+        {
+            this->left->preorderTravel(nodes);
+        }
+        if(this->right!=nullptr)
+        {
+            this->right->preorderTravel(nodes);
+        }
+        nodes.push_back(this);
 	}
 
 	Node* find(int value) {
@@ -155,15 +204,17 @@ struct SearchTreeNode : public Node
         left = right = NULL;
     }
 
-    SearchTreeNode(int value) : Node(value) {initNode(value);}
+    /*SearchTreeNode(int value) : SearchTreeNode(value) {initNode(value);}
     ~SearchTreeNode() {}
     int get_value() const {return value;}
     Node* get_left_child() const {return left;}
-    Node* get_right_child() const {return right;}
+    Node* get_right_child() const {return right;}*/
 };
 
-Node* createNode(int value) {
-    return new SearchTreeNode(value);
+SearchTreeNode* createNode(int value) {
+     SearchTreeNode* new_node = new SearchTreeNode;
+    new_node->value = value;
+    return new_node;
 }
 
 int main(int argc, char *argv[])
@@ -174,5 +225,5 @@ int main(int argc, char *argv[])
 	// w->show();
 
 	// return a.exec();
-    return ;
+    return 0;
 }

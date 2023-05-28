@@ -21,12 +21,17 @@ void insertionSort(vector<int>& toSort)
 	vector<int> selection;
     selection.push_back(toSort[0]);
     for(int index = 1 ; index < toSort.size() ; index++){
+       bool sup = false;
        for (int j = 0 ; j < selection.size() ; j++){
             if (selection[j] > toSort[index]){
+                sup = true;
                 std::vector<int>::iterator it = selection.begin();
                 selection.insert(it+j,toSort[index]);
                 break;
             }
+       }
+       if(sup==false)
+       {
             selection.push_back(toSort[index]);
        }
     }

@@ -183,7 +183,10 @@ void HuffmanNode::processCodes(const std::string baseCode)
      **/
 
     // Your code
-    for(int index = 0)
+    for(int index = 0;;index++)
+    {
+
+    }
 }
 
 void HuffmanNode::fillCharactersArray(std::string charactersCodes[])
