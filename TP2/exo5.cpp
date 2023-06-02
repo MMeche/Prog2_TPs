@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-void merge(vector<int> first, vector<int> second, vector<int> result);
+void merge(vector<int>& first, vector<int>& second, vector<int>& result);
 // #include "tp2.h"
 
 // MainWindow* w=nullptr;
@@ -41,7 +41,7 @@ void splitAndMerge(vector<int>& origin)
 	merge(first,second,origin);
 }
 
-int min(vector<int> first , vector<int> second)
+int min(vector<int>& first , vector<int>& second)
 {
 	int i_min_first = 0;
 	int i_min_sec = 0;
@@ -78,7 +78,7 @@ int min(vector<int> first , vector<int> second)
 	}
 }
 
-void merge(vector<int> first, vector<int> second, vector<int> result)
+void merge(vector<int>& first, vector<int>& second, vector<int>& result)
 {
 	for(int index = 0 ; index < result.size() ; index++)
 	{

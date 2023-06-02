@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
         std::cout<<value<<" est present a la position : "<<search(value,sorted,sorted.size())-1<<"\n";
         return 0;
     }
-    std::cout<<"La valeur n'est pas presente";
+    std::cout<<"La valeur n'est pas presente\n";
     return 0;
      // main loop while window is opened
 }

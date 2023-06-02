@@ -1,9 +1,9 @@
 #include <time.h>
 #include<vector>
 #include<iostream>
-void allEvens(std::vector<int> evens, std::vector<int> array, int evenSize, int arraySize)
+void allEvens(std::vector<int> &evens, std::vector<int> &array, int evenSize, int arraySize)
 {
-    if(arraySize<=0)
+    if(arraySize==0)
     {
         return;
     }
@@ -30,10 +30,10 @@ int main(int argc, char *argv[])
         std::cout << '\n';
     }
     std::vector<int> Evens;
-    allEvens(Evens,sorted,0,sorted.size());
-    std::cout << "Evens contains:";
-    for (std::vector<int>::iterator it=Evens.begin(); it<Evens.end(); it++){
-        std::cout << ' ' << *it;
+    allEvens(Evens,sorted,0,(int)sorted.size());
+    std::cout << "Evens contains:\n";
+    for (int it=0; it<Evens.size(); it++){
+        std::cout << Evens[it];
         std::cout << '\n';
     }
 

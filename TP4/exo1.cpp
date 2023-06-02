@@ -63,7 +63,8 @@ struct Heap
 		this->tab = Numbers;
 		for(int i=0;i<Numbers.size();i++)
 		{
-			heapify(i);
+
+			this->heapify(i);
 		}
 	}
 
@@ -74,7 +75,7 @@ struct Heap
 			int tmp = this->tab[0];
 			this->tab[0] = this->tab[i];
 			this->tab[i] = tmp;
-			heapify(i);
+			this->heapify(i);
 		}
 	}
 };
@@ -91,5 +92,7 @@ struct Node
 
 int main(int argc, char *argv[])
 {
+
+	
 	return 0;
 }

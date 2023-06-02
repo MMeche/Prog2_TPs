@@ -11,7 +11,8 @@ using namespace std;
 // MainWindow* w = nullptr;
  using std::size_t;
 
- struct Node {
+struct Node 
+{
     Node* left;
     Node* right;
     int value;
@@ -219,11 +220,28 @@ SearchTreeNode* createNode(int value) {
 
 int main(int argc, char *argv[])
 {
-	// QApplication a(argc, argv);
-	// MainWindow::instruction_duration = 200;
-    // w = new BinarySearchTreeWindow<SearchTreeNode>();
-	// w->show();
+	SearchTreeNode* Tree = new SearchTreeNode;
+    std::vector<SearchTreeNode*> nodes;
+    std::vector<SearchTreeNode*> leaves;
+    unsigned int leavesCount = 0;
+    Tree->initNode(9);
+    Tree->insertNumber(4);
+    Tree->insertNumber(11);
+    
+    int nodesCount  = Tree->nodesCount();
 
-	// return a.exec();
+    Tree->inorderTravel(nodes,nodes.begin());
+    for(int i = 0; i<nodes.size(); i++)
+    {
+        if(nodes[i]->isLeaf())
+        {
+            leavesCount ++;
+        }
+    }
+
+    std::cout<<"Il y a "<<nodesCount<<" nodes dans l'arbre\n";
+    std::cout<<"Dont "<<leavesCount<<" sont des feuilles\n";
+    
+    //Tree->allLeaves(leaves,leavesCount);
     return 0;
 }

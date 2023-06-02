@@ -10,11 +10,11 @@ class Point
         float y;
         int length()
         {
-            sqrt(pow(x,2.)+pow(y,2.));
+            return sqrt(pow(x,2.)+pow(y,2.));
         };
         int squareLength()
         {
-            sqrt(pow(pow(x,2.)-pow(y,2.),2.)+pow(2*x*y,2.));
+            return sqrt(pow(pow(x,2.)-pow(y,2.),2.)+pow(2*x*y,2.));
         };
 };
 
@@ -28,8 +28,8 @@ int isMandelbrot(Point z, int n, Point point){
     }
     // check length of z
     if(z.length()>2)
-    {
-        return 1;
+    {   
+        return n;
     }
     else
     {
@@ -46,8 +46,9 @@ int isMandelbrot(Point z, int n, Point point){
 int main(int argc, char *argv[])
 {
     Point point;
-    point.x = 2;
-    point.y = 3;
+    point.x = 1;
+    point.y = 1;
+    std::cout<<isMandelbrot(point,8,point)<<"\n";
 }
 
 

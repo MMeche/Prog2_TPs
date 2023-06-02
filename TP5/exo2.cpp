@@ -1,17 +1,15 @@
-#include <QApplication>
-#include <QString>
 #include <time.h>
 #include <stdio.h>
 #include <string>
+#include <vector>
+#include <math.h>
 
-#include <tp5.h>
 
-MainWindow* w = nullptr;
 using std::size_t;
 using std::string;
 
 
-std::vector<string> TP5::names(
+std::vector<string> names(
 {
     "Yolo", "Anastasiya", "Clement", "Sirine", "Julien", "Sacha", "Leo", "Margot",
     "JoLeClodo", "Anais", "Jolan", "Marie", "Cindy", "Flavien", "Tanguy", "Audrey",
@@ -22,11 +20,16 @@ std::vector<string> TP5::names(
 
 unsigned long int hash(string key)
 {
-    // return an unique hash id from key
-    return 0;
+    unsigned long int h = 0;
+    for(int i = 0 ; i < key.length(); i++)
+    {
+        h += (int)pow((int)key[i],key.length()-i-1)%139; 
+        /*Modulo un nombre premier, askip c'est mieux*/
+    }
+    return h;
 }
 
-struct MapNode : public BinaryTree
+struct MapNode
 {
 
     string key;
@@ -37,7 +40,7 @@ struct MapNode : public BinaryTree
     MapNode* left;
     MapNode* right;
 
-    MapNode(string key, int value) : BinaryTree (value)
+    MapNode(string key, int value)
     {
         this->key = key;
         this->value = value;
@@ -52,7 +55,26 @@ struct MapNode : public BinaryTree
      */
     void insertNode(MapNode* node)
     {
-
+        /*Il ne faut pas que la root soit nullptr*/
+        if(this->key_hash>=node->key_hash)
+        {
+            if(this->left==nullptr)
+            {
+                this->left = node;
+            }else
+            {
+                this->left->insertNode(node);
+            }
+        }else
+        {
+            if(this->right==nullptr)
+            {
+                this->right = node;
+            }else
+            {
+                this->right->insertNode(node);
+            }
+        }
     }
 
     void insertNode(string key, int value)
@@ -60,14 +82,12 @@ struct MapNode : public BinaryTree
         this->insertNode(new MapNode(key, value));
     }
 
-    virtual ~MapNode() {}
-    QString toString() const override {return QString("%1:\n%2").arg(QString::fromStdString(key)).arg(value);}
-    Node* get_left_child() const {return left;}
-    Node* get_right_child() const {return right;}
 };
 
 struct Map
 {
+
+    MapNode* root;
     Map() {
         this->root = nullptr;
     }
@@ -79,7 +99,15 @@ struct Map
      */
     void insert(string key, int value)
     {
-
+        MapNode* newNode = new MapNode(key,value);
+        if(this->root == nullptr)
+        {
+            this->root = newNode;
+        }
+        else
+        {   
+            this->root->insertNode(newNode);
+        }
     }
 
     /**
@@ -88,11 +116,29 @@ struct Map
      * @return
      */
     int get(string key)
-    {
+    {   
+        int hash_key = hash(key);
+        MapNode* current;
+        current = this->root;
+        while(current != nullptr)
+        {
+            if(hash_key==current->key_hash)
+            {
+                return current->value;
+            }
+            else{    
+                if(hash_key<current->key_hash)
+                {
+                    current = current->left;
+                }
+                else
+                {
+                    current = current->right;
+                }
+            };
+        } ;
         return -1;
-    }
-
-    MapNode* root;
+    };
 };
 
 
@@ -102,7 +148,7 @@ int main(int argc, char *argv[])
 	Map map;
 
     map.insert("Yolo", 20);
-    for (std::string& name : TP5::names)
+    for (std::string& name : names)
     {
         if (rand() % 3 == 0)
         {
@@ -116,11 +162,4 @@ int main(int argc, char *argv[])
     printf("map[\"Clemence\"]=%d\n", map.get("Clemence"));
     printf("map[\"Yolo\"]=%d\n", map.get("Yolo"));
     printf("map[\"Tanguy\"]=%d\n", map.get("Tanguy"));
-
-
-    QApplication a(argc, argv);
-    MainWindow::instruction_duration = 200;
-    w = new MapWindow(*map.root);
-    w->show();
-    return a.exec();
 }

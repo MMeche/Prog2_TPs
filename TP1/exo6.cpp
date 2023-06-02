@@ -11,11 +11,7 @@ struct Liste{
     Noeud* premier;
 };
 
-struct DynaTableau{
-    int* donnees;
-    int taille;
-    int max_taille;
-};
+
 
 
 void initialise_l(Liste* liste)
@@ -87,56 +83,52 @@ int cherche_l(const Liste* liste, int valeur)
 void stocke_l(Liste* liste, int n, int valeur)
 {
     Noeud* current = liste->premier;
-    for(int i = 0; i<n;i++){
+    for(int i = 0; i<n-1;i++){
         current = current->suivant;
     }
     current->donnee = valeur;
 }
 
-void ajoute_t(DynaTableau* tableau, int valeur)
-{
-    int taille = tableau->taille;
-    int max_taille = tableau->taille;
-    if(taille+1 > max_taille)
-    {
-        int new_donnee[max_taille+1];
-        for(int i =0; i<max_taille;i++)
-        {
-            new_donnee[i] = tableau->donnees[i];
-        }
-        new_donnee[max_taille] = valeur;
-        tableau->max_taille ++;
-        tableau->taille++;
-        tableau->donnees=new_donnee;
-    }
-    else{
-        tableau->donnees[taille] = valeur;
-        tableau->taille++;
-    }
-}
-
+struct DynaTableau{
+    int* donnees;
+    int max_taille;
+};
 
 void initialise_t(DynaTableau* tableau, int capacite)
 {
-    int donnees[capacite];
-    tableau->donnees = donnees;
+    tableau->donnees = new int[capacite];
     tableau->max_taille = capacite;
-    tableau->taille = 0;
+}
+
+void ajoute_t(DynaTableau* tableau, int valeur)
+{
+    if(tableau->donnees == nullptr)
+    {
+        tableau->donnees = new int[1];
+        tableau->donnees[0] = valeur;
+        tableau->max_taille = 1;
+    }else
+    {
+        int* newTab = new int[tableau->max_taille+1];
+        for(int i = 0 ; i<tableau->max_taille+1;i++)
+        {
+            newTab[i] = tableau->donnees[i];
+        }
+        newTab[tableau->max_taille] = valeur;
+        tableau->max_taille++;
+        tableau->donnees = newTab;
+    }
 }
 
 bool est_vide_t(DynaTableau* tableau)
 {
-    if(tableau->taille != 0)
-    {
-        return false;
-    }
-    return true;
+   return tableau->donnees == nullptr;
 }
 
-void affiche_t(const DynaTableau* tableau)
+void affiche_t(DynaTableau* tableau)
 {
     std::cout<<"[ ";
-    for(int i = 0; i <tableau->taille;i++){
+    for(int i = 0; i <tableau->max_taille;i++){
     std::cout<<", "<<tableau->donnees[i];
     }
     std::cout<<" ]";
@@ -144,17 +136,28 @@ void affiche_t(const DynaTableau* tableau)
 
 int recupere_t(const DynaTableau* tableau, int n)
 {
-    
+    return tableau->donnees[n-1];
 }
 
 int cherche_t(const DynaTableau* tableau, int valeur)
 {
-
+    for(int i = 0 ; i< tableau->max_taille;i++)
+    {
+        if(tableau->donnees[i]==valeur)
+        {
+            return i+1;
+        };
+    };
+    return -1;
 }
 
 void stocke_t(DynaTableau* tableau, int n, int valeur)
 {
+    tableau->donnees[n-1] = valeur;
+    return;
 }
+
+/*PILE ET FILE*/
 
 //void pousse_file(DynaTableau* liste, int valeur)
 void pousse_file_l(Liste* liste, int valeur)
@@ -227,7 +230,7 @@ int main()
     Liste liste;
     initialise_l(&liste);
     DynaTableau tableau;
-    initialise_t(&tableau, 5);
+    initialise_t(&tableau, 0);
     std::cout<<"Valeurs par défauts :"<<std::endl;
     affiche_l(&liste);
     affiche_t(&tableau);
@@ -264,18 +267,18 @@ int main()
     std::cout << std::endl;
 
     std::cout << "5e valeur de la liste " << recupere_l(&liste, 4) << std::endl;
-    // std::cout << "5e valeur du tableau " << recupere_t(&tableau, 4) << std::endl;
+    std::cout << "5e valeur du tableau " << recupere_t(&tableau, 4) << std::endl;
 
     std::cout << "21 se trouve dans la liste à " << cherche_l(&liste, 21) << std::endl;
-    // std::cout << "15 se trouve dans la liste à " << cherche_t(&tableau, 15) << std::endl;
+    std::cout << "15 se trouve dans le tableau à " << cherche_t(&tableau, 15) << std::endl;
 
     stocke_l(&liste, 4, 7);
-    // stocke_t(&tableau, 4, 7);
+    stocke_t(&tableau, 4, 7);
 
     std::cout << "Elements après stockage de 7:" << std::endl;
     
     affiche_l(&liste);
-    // affiche_t(&tableau);
+    affiche_t(&tableau);
     std::cout << std::endl;
 
     Liste pile; // DynaTableau pile;
